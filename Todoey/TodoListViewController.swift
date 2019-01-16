@@ -12,17 +12,28 @@ class TodoListViewController: UITableViewController {
   
   var itemArray = ["Find Mike", "Buy Eggos", "Destory Demogorgon"]
   
+  let defaults = UserDefaults.standard
+  
+  
   override func viewDidLoad() {
     super.viewDidLoad()
-
+    
+    if let items = defaults.array(forKey: "TodoListArray") as? [String] {
+      itemArray = items
+    }
+    
+    
   }
+  
 
   //MARK - Tableview Datasource Methods
+  
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return itemArray.count
   }
   
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    
     let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
     
     cell.textLabel?.text = itemArray[indexPath.row]
@@ -30,6 +41,7 @@ class TodoListViewController: UITableViewController {
     return cell
     
   }
+  
   
   //MARK - TableView Delegate Methods
   
@@ -47,6 +59,7 @@ class TodoListViewController: UITableViewController {
     
   }
   
+  
   //MARK - Add New Items
   
   @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
@@ -59,6 +72,8 @@ class TodoListViewController: UITableViewController {
         //what will happen once the user clicks the Add Item button on our UIAlert
       
         self.itemArray.append(textField.text!)
+      
+        self.defaults.set(self.itemArray, forKey: "TodoListArray")
       
         self.tableView.reloadData()
     }
